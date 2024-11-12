@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reseñas de Platos</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <header>
+        <h1>Reseñas de Platos</h1>
+        <h2>"Arroz con Pollo"</h2>
+    </header>
+
+    <div class="content" id="reviews-container">
+        <!-- Las reseñas se cargarán aquí dinámicamente -->
+    </div>
+
+    <footer>
+        <p>&copy; 2023 - Reseñas de Platos</p>
+    </footer>
+
+    <script>
+        var data = [
+            {
+                plato: "Arroz con pollo 1",
+                cliente: "María García",
+                reseña: "La comida fue espectacular y el ambiente muy acogedor. Sin duda, un lugar al que volveré.",
+                likes: 0,
+                dislikes: 0,
+                comentarios:[],
+            },
+            {
+                plato: "Arroz con pollo 2",
+                cliente: "Juan Pérez",
+                reseña: "Excelente servicio y platos deliciosos. ¡Muy recomendado!",
+                likes: 0,
+                dislikes: 0,
+                comentarios:[],
+            },
+            {
+                plato: "Arroz con pollo 3",
+                cliente: "Ana López",
+                reseña: "La comida estaba fría y el servicio fue lento. No volveré.",
+                likes: 0,
+                dislikes: 0,
+                comentarios:[],
+            }
+        ];
+        
+        function loadReviews() {
+            const container = document.getElementById("reviews-container");
+            container.innerHTML = ""; 
+
+            data.forEach((review, index) => {
+                const reviewElement = document.createElement("div");
+                reviewElement.className = "review";
+                reviewElement.id = `review-${index}`;
+
+                reviewElement.innerHTML = `
+                    <button class="delete-btn" onclick="deleteReview(${index})">Eliminar</button>
+                    <h2>${review.plato}</h2>
+                    <p><strong>Cliente:</strong> ${review.cliente}</p>
+                    <p><strong>Reseña:</strong> ${review.reseña}</p>
+                    <button class="like-btn" onclick="updateLikes(${index})">Me gusta <span class="like-count">${review.likes}</span></button>
+                    <button class="dislike-btn" onclick="updateDislikes(${index})">No me gusta <span class="dislike-count">${review.dislikes}</span></button>
+                    
+                    <div class="comment-box">
+                        <input type="text" placeholder="Escribe un comentario..." class="comment-input" id="comment-input-${index}">
+                        <button class="comment-btn" onclick="addComment(${index})">Comentar</button>
+                    </div>
+
+                    <div class="comments" id="comments-${index}">
+                        ${review.comentarios.map(comment => `<div class="comment">${comment}</div>`).join('')}
+                    </div>
+                `;
+                
+                container.appendChild(reviewElement);
+            });
+        }
+
+        function updateLikes(index) {
+            data[index].likes += 1;
+            loadReviews();
+        }
+
+        function updateDislikes(index) {
+            data[index].dislikes += 1;
+            loadReviews();
+        }
+
+        function deleteReview(index) {
+            data.splice(index, 1);
+            loadReviews();
+        }
+
+        function addComment(index) {
+            const commentInput = document.getElementById(`comment-input-${index}`);
+            const commentText = commentInput.value.trim();
+
+            if (commentText) {
+                data[index].comentarios.push(commentText);
+                commentInput.value = "";
+                loadReviews();
+            }
+        }
+
+        window.onload = loadReviews;
+    </script>
+
+</body>
+</html>
+
+
+
